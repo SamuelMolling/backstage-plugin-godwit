@@ -5,10 +5,12 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/SamuelMolling/godwit",
-    "directory": "backstage"
+    "url": "https://github.com/SamuelMolling/backstage-plugin-godwit.git"
   },
-  "homepage": "https://github.com/SamuelMolling/godwit/blob/main/docs/use/backstage.md",
+  "homepage": "https://github.com/SamuelMolling/backstage-plugin-godwit#readme",
+  "bugs": {
+    "url": "https://github.com/SamuelMolling/backstage-plugin-godwit/issues"
+  },
   "keywords": [
     "backstage",
     "backstage-plugin",
@@ -24,6 +26,9 @@
     ]
   },
   "sideEffects": false,
+  "engines": {
+    "node": ">=22"
+  },
   "main": "src/index.ts",
   "types": "src/index.ts",
   "publishConfig": {
