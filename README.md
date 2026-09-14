@@ -59,3 +59,23 @@ import { GodwitTargetsView } from 'backstage-plugin-godwit';
 
 The full guide — the proxy's reach, a custom proxy path, what each field means — is
 [docs/use/backstage.md](https://github.com/SamuelMolling/godwit/blob/main/docs/use/backstage.md).
+
+## Development
+
+Node 22 or later.
+
+```bash
+npm ci
+npm run tsc
+npm run lint
+npm test        # fails below 100% coverage
+npm run build
+```
+
+The lockfile resolves the `@backstage/*` packages Backstage 1.38 shipped, so the tests run against the oldest
+release the package supports. Publishing is `npm publish` after `npm run build`; `prepack` rewrites `main` and
+`types` to the build output.
+
+## License
+
+[Apache-2.0](LICENSE)
