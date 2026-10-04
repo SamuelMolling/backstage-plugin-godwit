@@ -47,7 +47,7 @@
     "test": "backstage-cli package test --watchAll=false --coverage",
     "tsc": "tsc",
     "clean": "backstage-cli package clean",
-    "prepack": "backstage-cli package prepack",
+    "prepack": "tsc && backstage-cli package build && backstage-cli package prepack",
     "postpack": "backstage-cli package postpack"
   },
   "dependencies": {
