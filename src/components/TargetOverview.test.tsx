@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import { linksTo } from './links';
 import { TargetOverview, TargetOverviewProps } from './TargetOverview';
 
 const done = <T,>(value: T) => ({ loading: false, value });
@@ -11,6 +12,7 @@ function show(props: Partial<TargetOverviewProps>) {
       status={done({ provider: 'vault', applied: [{ version: '3' }, { name: 'v', repeatable: true }] })}
       plans={done([])}
       summaries={done([{ name: 'orders', provider: 'vault', attentionRuns: 2 }])}
+      links={linksTo(undefined)}
       {...props}
     />,
   );

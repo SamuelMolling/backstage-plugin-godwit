@@ -11,12 +11,14 @@ import { AsyncState } from 'react-use/lib/useAsyncFn';
 import { DriftEvent, TargetStatus } from '../api/types';
 import { DiffBlock } from './DiffBlock';
 import { formatTime } from './format';
-import { Section, Unavailable } from './Section';
+import { GodwitLinks } from './links';
+import { MaybeLink, Section, Unavailable } from './Section';
 
 export interface DriftPanelProps {
   target: string;
   events: AsyncState<DriftEvent[]>;
   status: AsyncState<TargetStatus>;
+  links: GodwitLinks;
 }
 
 const Legend = () => (
@@ -26,7 +28,15 @@ const Legend = () => (
   </Typography>
 );
 
-const OpenDrift = ({ target, open }: { target: string; open: DriftEvent[] }) => (
+const OpenDrift = ({
+  target,
+  open,
+  links,
+}: {
+  target: string;
+  open: DriftEvent[];
+  links: GodwitLinks;
+}) => (
   <>
     <Typography variant="body1" gutterBottom>
       <StatusError>drifted</StatusError> {target} has changed outside a migration.
@@ -45,6 +55,11 @@ const OpenDrift = ({ target, open }: { target: string; open: DriftEvent[] }) => 
       meant to stay as it is, an operator runs <code>godwit drift accept {target}</code> to make the live schema the
       new baseline.
     </Typography>
+    {links.drift() && (
+      <Typography variant="body2" component="p">
+        <MaybeLink to={links.drift()}>Review it on the godwit drift page</MaybeLink>
+      </Typography>
+    )}
   </>
 );
 
@@ -99,7 +114,7 @@ const History = ({ resolved }: { resolved: DriftEvent[] }) => (
   </Table>
 );
 
-export const DriftPanel = ({ target, events, status }: DriftPanelProps) => {
+export const DriftPanel = ({ target, events, status, links }: DriftPanelProps) => {
   if (events.loading || status.loading) {
     return (
       <Section title="Drift">
@@ -119,7 +134,11 @@ export const DriftPanel = ({ target, events, status }: DriftPanelProps) => {
   const resolved = all.filter(e => e.resolvedAt);
   return (
     <Section title="Drift">
-      {open.length > 0 ? <OpenDrift target={target} open={open} /> : <NoOpenDrift target={target} status={status} />}
+      {open.length > 0 ? (
+        <OpenDrift target={target} open={open} links={links} />
+      ) : (
+        <NoOpenDrift target={target} status={status} />
+      )}
       {resolved.length > 0 && (
         <>
           <Typography variant="subtitle2" component="h4">
