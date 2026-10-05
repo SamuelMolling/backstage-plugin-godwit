@@ -1,7 +1,6 @@
 import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 import { configApiRef } from '@backstage/core-plugin-api';
-import { ConfigReader } from '@backstage/config';
-import { renderInTestApp, TestApiProvider } from '@backstage/test-utils';
+import { MockConfigApi, renderInTestApp, TestApiProvider } from '@backstage/test-utils';
 import { GodwitApi, godwitApiRef } from '../api/GodwitApi';
 import { GodwitTargetsView } from './GodwitTargetsView';
 
@@ -33,7 +32,7 @@ function fakeApi(overrides: Partial<GodwitApi> = {}): jest.Mocked<GodwitApi> {
 }
 
 async function render(api: GodwitApi, targets: string[], maxRuns?: number, publicUrl?: string) {
-  const config = new ConfigReader(publicUrl ? { godwit: { publicUrl } } : {});
+  const config = new MockConfigApi(publicUrl ? { godwit: { publicUrl } } : {});
   await renderInTestApp(
     <TestApiProvider apis={[[godwitApiRef, api], [configApiRef, config]]}>
       <GodwitTargetsView targets={targets} maxRuns={maxRuns} />
