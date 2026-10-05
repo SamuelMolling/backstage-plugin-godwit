@@ -4,7 +4,8 @@ import { Progress } from '@backstage/core-components';
 import { AsyncState } from 'react-use/lib/useAsyncFn';
 import { Plan, TargetStatus, TargetSummary } from '../api/types';
 import { newestVersion, pendingOf, shortId, versionedCount } from './format';
-import { Unavailable } from './Section';
+import { GodwitLinks } from './links';
+import { MaybeLink, Unavailable } from './Section';
 
 const Fact = ({ label, children }: { label: string; children: ReactNode }) => (
   <Grid item xs={6} md={4}>
@@ -22,6 +23,7 @@ export interface TargetOverviewProps {
   status: AsyncState<TargetStatus>;
   plans: AsyncState<Plan[]>;
   summaries: AsyncState<TargetSummary[]>;
+  links: GodwitLinks;
 }
 
 function credentialStore(summary: TargetSummary): string {
@@ -31,7 +33,7 @@ function credentialStore(summary: TargetSummary): string {
   return summary.credentialStore || 'VAULT_ADDR';
 }
 
-export const TargetOverview = ({ target, status, plans, summaries }: TargetOverviewProps) => {
+export const TargetOverview = ({ target, status, plans, summaries, links }: TargetOverviewProps) => {
   if (status.loading || plans.loading || summaries.loading) {
     return <Progress />;
   }
@@ -58,7 +60,14 @@ export const TargetOverview = ({ target, status, plans, summaries }: TargetOverv
         <Fact label="Pending">
           {plans.value === undefined && 'unknown'}
           {plans.value && !pending && 'no ready plan'}
-          {pending && `${pending.count} in plan ${shortId(pending.planId)}`}
+          {pending && (
+            <>
+              {pending.count} in plan{' '}
+              <MaybeLink to={links.plan(pending.planId)}>
+                <code>{shortId(pending.planId)}</code>
+              </MaybeLink>
+            </>
+          )}
         </Fact>
         <Fact label="Provider">{status.value?.provider ?? summary?.provider ?? 'unknown'}</Fact>
         <Fact label="Credential store">{summary ? credentialStore(summary) : 'unknown'}</Fact>

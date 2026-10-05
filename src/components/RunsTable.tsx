@@ -12,7 +12,8 @@ import {
 import { AsyncState } from 'react-use/lib/useAsyncFn';
 import { Run, RunState } from '../api/types';
 import { formatActor, formatTime, shortId } from './format';
-import { Section, Unavailable } from './Section';
+import { GodwitLinks } from './links';
+import { MaybeLink, Section, Unavailable } from './Section';
 
 const indicators: Partial<Record<RunState, ComponentType<{ children?: ReactNode }>>> = {
   RUN_STATE_QUEUED: StatusPending,
@@ -66,9 +67,10 @@ export interface RunsTableProps {
   target: string;
   runs: AsyncState<Run[]>;
   maxRuns: number;
+  links: GodwitLinks;
 }
 
-export const RunsTable = ({ target, runs, maxRuns }: RunsTableProps) => {
+export const RunsTable = ({ target, runs, maxRuns, links }: RunsTableProps) => {
   let body: ReactNode;
   if (runs.loading) {
     body = <Progress />;
@@ -93,7 +95,9 @@ export const RunsTable = ({ target, runs, maxRuns }: RunsTableProps) => {
           {runs.value.slice(0, maxRuns).map(run => (
             <TableRow key={run.id}>
               <TableCell title={run.id}>
-                <code>{shortId(run.id)}</code>
+                <MaybeLink to={links.run(run.id)}>
+                  <code>{shortId(run.id)}</code>
+                </MaybeLink>
               </TableCell>
               <TableCell>
                 <State run={run} />

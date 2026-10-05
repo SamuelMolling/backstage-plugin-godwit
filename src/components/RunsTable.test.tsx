@@ -2,9 +2,10 @@ import { ComponentProps } from 'react';
 import { screen, within } from '@testing-library/react';
 import { renderInTestApp } from '@backstage/test-utils';
 import { Run } from '../api/types';
+import { linksTo } from './links';
 import { kindLabel, RunsTable, stateLabel } from './RunsTable';
 
-const show = (runs: RunsTableRuns) => renderInTestApp(<RunsTable target="orders" runs={runs} maxRuns={10} />);
+const show = (runs: RunsTableRuns) => renderInTestApp(<RunsTable target="orders" runs={runs} maxRuns={10} links={linksTo(undefined)} />);
 type RunsTableRuns = ComponentProps<typeof RunsTable>['runs'];
 
 describe('RunsTable', () => {

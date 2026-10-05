@@ -2,13 +2,22 @@ import { screen, within } from '@testing-library/react';
 import { renderInTestApp } from '@backstage/test-utils';
 import { DriftPanel, DriftPanelProps } from './DriftPanel';
 import { lineKind } from './DiffBlock';
+import { linksTo } from './links';
 
 const done = <T,>(value: T) => ({ loading: false, value });
 
 const baselined = done({ driftBaseline: { takenAt: '2026-09-01T08:00:00Z' } });
 
 async function show(props: Partial<DriftPanelProps>) {
-  await renderInTestApp(<DriftPanel target="orders" events={done([])} status={baselined} {...props} />);
+  await renderInTestApp(
+    <DriftPanel
+      target="orders"
+      events={done([])}
+      status={baselined}
+      links={linksTo(undefined)}
+      {...props}
+    />,
+  );
 }
 
 describe('DriftPanel', () => {

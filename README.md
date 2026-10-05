@@ -31,6 +31,14 @@ proxy:
         Authorization: 'Bearer ${GODWIT_BACKSTAGE_TOKEN}'
 ```
 
+`godwit.publicUrl` is where the operator reaches the godwit UI. Set it and the view links targets, runs
+and plans straight at it; leave it out and those read as plain text:
+
+```yaml
+godwit:
+  publicUrl: https://godwit.internal.example.com
+```
+
 ## Use
 
 On a catalog entity, name the targets:
